@@ -76,36 +76,33 @@ while True:
 
     # check if it's a new value
     epochTime = regexEpochTime.findall(data_received)
-    if epochtime_old != epochTime[0]:
-      epochtime_old = epochTime[0]
-      currents = regexCurrent.findall(data_received)
-      voltages = regexVoltage.findall(data_received)
-      powerUsage = regexPower.findall(data_received)
-      totalReading = regexReading.search(data_received).groups()
+    epochtime_old = epochTime[0]
+    currents = regexCurrent.findall(data_received)
+    voltages = regexVoltage.findall(data_received)
+    powerUsage = regexPower.findall(data_received)
+    totalReading = regexReading.search(data_received).groups()
 
-      # create a json object with the data.
-      try:
-        pipe = redisConnection.pipeline(transaction=True)
-        for i in range(0,3):
-          storeSensorValueInRedis(pipe, meterId, epochTime[0], "L"+str(1+i)+".Voltage", voltages[i].strip("*V"));
-          storeSensorValueInRedis(pipe, meterId, epochTime[0], "L"+str(1+i)+".Current", currents[i].strip("*A"));
-          storeSensorValueInRedis(pipe, meterId, epochTime[0], "L"+str(1+i)+".Power",   powerUsage[i].strip("+*"));
-          
-        storeSensorValueInRedis(pipe, meterId, epochTime[0], "Total", totalReading[0]);
-        pipe.execute()
-      except: 
-        print("Error contacting redis. Trying to reconnect.")
-        redisConnection = redis.Redis("glados.shack")
+    # create a json object with the data.
+    try:
+      pipe = redisConnection.pipeline(transaction=True)
+      for i in range(0,3):
+        storeSensorValueInRedis(pipe, meterId, epochTime[0], "L"+str(1+i)+".Voltage", voltages[i].strip("*V"));
+        storeSensorValueInRedis(pipe, meterId, epochTime[0], "L"+str(1+i)+".Current", currents[i].strip("*A"));
+        storeSensorValueInRedis(pipe, meterId, epochTime[0], "L"+str(1+i)+".Power",   powerUsage[i].strip("+*"));
+        
+      storeSensorValueInRedis(pipe, meterId, epochTime[0], "Total", totalReading[0]);
+      pipe.execute()
+    except: 
+      print("Error contacting redis. Trying to reconnect.")
+      redisConnection = redis.Redis("glados.shack")
 
-      # TODO: Update redis for every phase
-      print(("Meter   : " + meterId)) 
-      print(("Time    : " + epochTime[0]))
-      print(("Voltage : " + voltages[0].strip("*V") + " / " + voltages[1].strip("*V") + " / " + voltages[2].strip("*V")))
-      print(("Current : " + currents[0].strip("*A") + " / " + currents[1].strip("*A") + " / " + currents[2].strip("*A")))
-      print(("Power   : " + powerUsage[0].strip("+*") + " / " + powerUsage[1].strip("+*") + " / " + powerUsage[2].strip("+*")))
-      print(("Consumed: " + totalReading[0]))
-      print("==")
-    else:
-          print(("not querying, no update: " + epochTime[0])) 
-    time.sleep(1)
+    # TODO: Update redis for every phase
+    print(("Meter   : " + meterId)) 
+    print(("Time    : " + epochTime[0]))
+    print(("Voltage : " + voltages[0].strip("*V") + " / " + voltages[1].strip("*V") + " / " + voltages[2].strip("*V")))
+    print(("Current : " + currents[0].strip("*A") + " / " + currents[1].strip("*A") + " / " + currents[2].strip("*A")))
+    print(("Power   : " + powerUsage[0].strip("+*") + " / " + powerUsage[1].strip("+*") + " / " + powerUsage[2].strip("+*")))
+    print(("Consumed: " + totalReading[0]))
+    print("==")
+    time.sleep(5)
 
