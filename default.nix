@@ -3,6 +3,7 @@
 , setuptools
 , pyserial
 , paho-mqtt
+, redis
 }:
 
 buildPythonPackage rec {
@@ -14,8 +15,9 @@ buildPythonPackage rec {
     setuptools
     pyserial
     paho-mqtt
+    redis
   ];
-
+  doCheck = false;
   meta = with lib; {
     description = "powerraw to redis and back";
     homepage = http://localhost;

@@ -1,21 +1,21 @@
 from setuptools import setup
 
 setup(
-    name="nixpkgs-pytools",
-    description="Tools for removing the tedious nature of creating nixpkgs derivations",
-    version="1.0.1",
+    name="powermeter",
+    description="Tools around the Hager powermeter inside shackspace",
+    version="1.1.0",
     packages=["powermeter"],
     license="MIT",
     long_description=open("README.md").read(),
-    author="Christopher Ostrouchov",
-    author_email="chris.ostrouchov@gmail.com",
-    url="https://github.com/nix-community/nixpkgs-pytools/",
-    install_requires=["jinja2", "setuptools"],
-    tests_require=["pytest"],
+    author="Felix Richter",
+    author_email="github@syntax-fehler.de",
+    url="https://git.shackspace.de/rz/powermeter",
+    install_requires=["pyserial","paho-mqtt","setuptools","redis"],
+    tests_require=[],
     entry_points={
         "console_scripts": [
-            "powermeter-daemon = powermeter.daemon:main",
-            "powermeter-appsrv = powermeter.cli:main"
+            "powermeter-mqtt2socket = powermeter.mqtt2socket:main",
+            "powermeter-serial2mqtt = powermeter.serial2mqtt:main"
         ]
     },
     classifiers=[
@@ -27,8 +27,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: Implementation :: CPython",
-        "Topic :: Software Development :: Code Generators",
-        "Topic :: System :: Software Distribution",
+        "Topic :: System :: Software Distribution"
     ],
 )
 
