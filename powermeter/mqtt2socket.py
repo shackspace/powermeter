@@ -22,7 +22,7 @@ async def smain():
     def on_connect(client,userdata,flags,rc):
         client.publish("/powersocket/lwt",payload="Online", qos=0, retain=True)
         print("subscribe to /powerraw/data")
-        client.subscribe('/powerraw/data')
+        client.subscribe('/power/raw')
     def on_message(client,userdata,message):
         global data
         # print("Received message")
