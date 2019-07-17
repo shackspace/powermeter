@@ -10,7 +10,9 @@ async def handle_socket(reader,writer):
     print(f"close connection of {writer.get_extra_info('peername')}")
     writer.close()
 
-async def main():
+def main():
+    asyncio.run(smain())
+async def smain():
     client = mqtt.Client()
 
     broker_url = "mqtt.shack"
@@ -38,4 +40,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
