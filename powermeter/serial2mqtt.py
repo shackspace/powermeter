@@ -49,7 +49,7 @@ def main():
     ser = Serial(baudrate=baudrate,port=port,parity=PARITY_EVEN,bytesize=SEVENBITS)
     while client.loop() == 0:
         data = ser.read_until(b'!',2048).decode().lstrip()
-        #client.publish(topic="/powerraw/data",payload=data,qos=0,retain=False)
+        client.publish(topic="/powerraw/data",payload=data,qos=0,retain=False)
         try:
             currents = [ float(x.strip("*A")) for x in regexCurrent.findall(data) ]
             voltages = [ float(x.strip("*V")) for x in regexVoltage.findall(data) ]
