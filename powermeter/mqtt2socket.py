@@ -21,6 +21,7 @@ async def smain():
 
     def on_connect(client,userdata,flags,rc):
         client.publish("/powersocket/lwt",payload="Online", qos=0, retain=True)
+        print("subscribe to /powerraw/data")
         client.subscribe('/powerraw/data')
     def on_message(client,userdata,message):
         global data
@@ -31,6 +32,7 @@ async def smain():
     client.will_set("/powersocket/lwt", payload="Offline", qos=0, retain=True)
     client.on_connect = on_connect
     client.on_message = on_message
+    print(f"connect to {broker_url}:{broker_port}")
     client.connect(broker_url, broker_port, 60)
     server = await asyncio.start_server(
         handle_socket , '0.0.0.0', 11111)
