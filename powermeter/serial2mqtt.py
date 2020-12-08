@@ -1,3 +1,7 @@
+""" usage: powermeter-serial2mqtt [PORT]
+
+PORT defaults to /dev/ttyUSB0
+"""
 import paho.mqtt.client as mqtt
 import sys
 from datetime import datetime
@@ -44,7 +48,7 @@ def main():
 
 
     baudrate=9600
-    port="/dev/ttyUSB0"
+    port=sys.argv[1] if len(sys.argv) > 1 else "/dev/ttyUSB0"
     print(f"Connecting to serial {port}@{baudrate} baud")
     ser = Serial(baudrate=baudrate,port=port,parity=PARITY_EVEN,bytesize=SEVENBITS)
     while client.loop() == 0:
